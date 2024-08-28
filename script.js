@@ -4,7 +4,6 @@ class BankAccount {
         this.owner = owner;
         this.balance = balance;
         this.transactions = [];
-        this.dailyLimits = [];
     }
 
     // method to display the account balance 
