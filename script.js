@@ -3,6 +3,8 @@ class BankAccount {
     constructor(owner, balance) {
         this.owner = owner;
         this.balance = balance;
+        this.transactions = [];
+        this.dailyLimits = [];
     }
 
     // method to display the account balance 
@@ -14,6 +16,7 @@ class BankAccount {
     deposit(amount) {
         console.log("deposit of " + amount + " EUR");
         this.balance += amount;
+        this.transactions.push(`deposit of ${amount} EUR`);
         this.showBalance();
     }
 
@@ -26,8 +29,15 @@ class BankAccount {
         else {
             console.log("withdrawal of " + amount + " EUR");
             this.balance -= amount;
+            this.transactions.push(`withdrawal of ${amount} EUR`)
             this.showBalance();
         }
+    }
+
+    // new: method to get transaction history
+    getTransactionHistory() {
+        console.log("\ntransactions history")
+        this.transactions.forEach(transaction => console.log(transaction))
     }
 }
 
@@ -37,4 +47,5 @@ console.log(myAccount)
 myAccount.showBalance();
 myAccount.deposit(100)
 myAccount.withdraw(200)
+myAccount.getTransactionHistory()
 
