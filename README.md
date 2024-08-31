@@ -10,3 +10,4 @@ This project demonstrates the basics of object-oriented programing in `JavaScrip
 3. withdraw money
 4. new: transactions history
 5. new: daily withdrawal limit
+6. new: added validation positive deposit and withdrawal amounts
