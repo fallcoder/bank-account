@@ -15,6 +15,10 @@ class BankAccount {
 
     // deposit money into account
     deposit(amount) {
+        if(amount <= 0) {
+            console.log("deposit amount must be positive");
+            return;
+        }
         console.log("deposit of " + amount + " EUR");
         this.balance += amount;
         this.transactions.push(`deposit of ${amount} EUR`);
@@ -23,6 +27,10 @@ class BankAccount {
 
     // withdraw money from the account respecting the daily limit   
     withdraw(amount) {
+        if(amount <= 0) {
+            console.log("withdrawal amount must be positive");
+            return;
+        }
         // check if the amount to withdraw is greater than the balance
         if(amount > this.balance) {
             console.log("withdrawal denied !");
@@ -56,8 +64,8 @@ class BankAccount {
 const myAccount = new BankAccount("Mouhamed", 500, 200);
 console.log(myAccount)
 myAccount.showBalance(); // display the initial account balance
-myAccount.deposit(100) // amount deposit
-myAccount.withdraw(200) // withdraw allowed since it's under the limit
-myAccount.withdraw(250) // withdraw declined since it exceeds the daily limit
+myAccount.deposit(-100) // amount deposit
+myAccount.withdraw(60) // withdraw allowed since it's under the limit
+myAccount.withdraw(50) // withdraw declined since it exceeds the daily limit
 myAccount.getTransactionHistory() // display the transactions history
 
