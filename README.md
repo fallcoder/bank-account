@@ -4,8 +4,9 @@
 # Summary
 This project demonstrates the basics of object-oriented programing in `JavaScript` by implementing a simple bank account system. It covers essential functionnalities such as managing the balance, making deposits and handling withdrawals.
 
-# Features
+# Features                                                                                            
 1. displays the current balance of the banck account
 2. deposit money
 3. withdraw money
 4. new: transactions history
+5. new: daily withdrawal limit
