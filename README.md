@@ -12,3 +12,5 @@ This project demonstrates the basics of object-oriented programing in `JavaScrip
 5. new: daily withdrawal limit
 6. new: added validation positive deposit and withdrawal amounts
 7. new: added robust and error handling for BankAccount operations
+8. date tracking for transactions
+9. transaction history with timestamps
