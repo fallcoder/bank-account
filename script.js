@@ -2,13 +2,13 @@ class BankAccount {
     // constructor initializes the owner and the balance of the account
     constructor(owner, balance, dailyLimit) {
         // validate the initial balance and daily limit are numbers
-        if(typeof balance ==! 'number' || isNaN(balance)) {
+        if(typeof balance !== 'number' || isNaN(balance)) {
             throw new Error("initial balance must be a valid number");  
         }
         if(balance < 0) {
             throw new Error("initial balance cannot be negative");    
         }
-        if(typeof dailyLimit ==! 'number' || isNaN(dailyLimit)) {
+        if(typeof dailyLimit !== 'number' || isNaN(dailyLimit)) {
             throw new Error("daily limit must be a valid number");  
         }
         if(dailyLimit <= 0) {
@@ -20,6 +20,7 @@ class BankAccount {
         this.dailyLimit = dailyLimit; // daily withdrawal limit
         this.totalWithdrawnToday = 0; // total amount withdrawn today
         this.transactions = []; // list of transactions
+        this.currentDate = new Date().toDateString(); // store the current dat
     }
 
     // method to display the account balance 
@@ -27,7 +28,7 @@ class BankAccount {
         console.log("balance: " + this.balance + " EUR");
     }
 
-    // deposit money into account
+    // makes a deposit and add it to transaction history
     deposit(amount) {
         if(typeof amount !== 'number' || isNaN(amount)) {
             throw new Error("deposit amount must be a valid number");
@@ -36,14 +37,31 @@ class BankAccount {
             console.log("deposit amount must be positive");
             return;
         }
-        console.log("deposit of " + amount + " EUR");
         this.balance += amount;
-        this.transactions.push(`deposit of ${amount} EUR`);
+        // transactions record with date and time
+        this.transactions.push({
+            type: "deposit",
+            amount: amount,
+            date: new Date()
+        });
+        console.log(`deposit of ${amount} EUR`);
         this.showBalance();
     }
 
-    // withdraw money from the account respecting the daily limit   
+    // makes a deposit and add it to transaction history 
     withdraw(amount) {
+        const today = new Date().toDateString();
+        // reset daily withdrawals if the date has changed
+        if(today !== this.currentDate) {
+            this.totalWithdrawnToday = 0;
+            this.currentDate = today;
+        }
+
+        // calculate the total withdrawn made today
+        const totalWithdrawnToday = this.transactions
+            .filter(t => t.type === "withdrawal" && new Date(t.date).toDateString() === today)
+            .reduce((total, t) => total + t.amount, 0);
+
         if(typeof amount !== 'number' || isNaN(amount)) {
             throw new Error("withdrawal amount must be a valid number");
         }
@@ -56,27 +74,29 @@ class BankAccount {
             console.log("withdrawal denied !");
         }
         // check if the daily limit is respected
-        else if((this.totalWithdrawnToday + amount) > this.dailyLimit) {
+        else if((totalWithdrawnToday + amount) > this.dailyLimit) {
             console.log("withdrawal denied ! daily withdrawal reached");
         }
         else {
-            console.log("withdrawal of " + amount + " EUR");
             this.balance -= amount;
-            this.totalWithdrawnToday += amount;
-            this.transactions.push(`withdrawal of ${amount} EUR`)
+            // transactions record with date and time
+            this.transactions.push({
+                type: "withdrawal",
+                amount: amount,
+                date: new Date()
+            }); 
+            console.log(`withdrawal of ${amount} EUR`);
             this.showBalance();
         }
-    }
 
-    // reset daily withdrawal total
-    resetDailyWithdrawals() {
-        this.totalWithdrawnToday = 0;
     }
 
     // method to get transaction history
     getTransactionHistory() {
         console.log("\ntransactions history")
-        this.transactions.forEach(transaction => console.log(transaction))
+        this.transactions.forEach(transaction =>
+            console.log(`${new Date(transaction.date).toLocaleString()} - ${transaction.type}: ${transaction.amount} EUR`)
+        );
     }
 }
 
@@ -87,7 +107,8 @@ try {
     myAccount.showBalance(); // display the initial account balance
     myAccount.deposit(-100) // amount deposit
     myAccount.withdraw(60) // withdraw allowed since it's under the limit
-    myAccount.withdraw(50) // withdraw declined since it exceeds the daily limit
+    myAccount.withdraw(60)
+    myAccount.withdraw(150) // withdraw declined since it exceeds the daily limit
     myAccount.getTransactionHistory() // display the transactions history
 }
 catch(error) {
